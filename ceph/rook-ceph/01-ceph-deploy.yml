@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-ceph
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rook-ceph
+  namespace: kube-system
+spec:
+  repo: https://charts.rook.io/release
+  chart: rook-ceph
+  version: 1.6.0
+  targetNamespace: rook-ceph
+  bootstrap: true
+  valuesContent: |-
+    csi:
+      enableCSIHostNetwork: true
+    tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    discover:
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+    csi:
+      provisionerTolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      pluginTolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+    agent:
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+    admissionController:
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists

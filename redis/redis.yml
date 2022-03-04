@@ -1,0 +1,12 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: redis
+  annotations:
+    helm.cattle.io/chart-url: ""
+spec:
+  repo: https://charts.bitnami.com/bitnami
+  chart: redis
+  valuesContent: |
+    replica:
+      replicaCount: 2

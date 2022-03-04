@@ -1,0 +1,56 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: monitoring
+  namespace: kube-system
+  annotations:
+    helm.cattle.io/chart-url: "https://github.com/prometheus-community/helm-charts/releases/download/kube-prometheus-stack-29.0.1/kube-prometheus-stack-29.0.1.tgz"
+spec:
+  bootstrap: true
+  repo: https://prometheus-community.github.io/helm-charts
+  chart: kube-prometheus-stack
+  version: 29.0.1
+  valuesContent: |
+    kubeEtcd:
+      enabled: false
+    kubeProxy:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    fullnameOverride: monitoring
+    alertmanager:
+      alertmanagerSpec:
+        storage:
+          volumeClaimTemplate:
+            metadata:
+              name: data
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+    prometheus:
+      prometheusSpec:
+        replicas: 1
+        retention: 15d
+        retentionSize: "10GB"
+        podMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        storageSpec:
+          volumeClaimTemplate:
+            metadata:
+              name: data
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+    grafana:
+      persistence:
+        enabled: true
+    prometheusOperator:
+      tls:
+        enabled: false
+      admissionWebhooks:
+        enabled: false

@@ -1,0 +1,15 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gitlab-runner
+  namespace: gitlab-runner
+spec:
+  repo: https://charts.up1987.com
+  chart: gitlab-docker-runner
+  valuesContent: |
+    runnerRegistrationToken: ""
+    gitlabUrl: "https://gitlab.com/"
+    fullnameOverride: runner
+    persistence:
+      enabled: true

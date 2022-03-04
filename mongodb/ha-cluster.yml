@@ -1,0 +1,18 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: mongo-ha
+  annotations:
+    helm.cattle.io/chart-url: ""
+spec:
+  repo: https://charts.bitnami.com/bitnami
+  chart: mongodb-sharded
+  valuesContent: |
+    shards: 3
+    configsvr:
+      replicas: 3
+    mongos:
+      replicas: 1
+    shardsvr:
+      dataNode:
+        replicas: 3

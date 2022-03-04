@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ceph-csi-rbd
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: ceph-csi-rbd
+  namespace: kube-system
+spec:
+  repo: https://ceph.github.io/csi-charts
+  chart: ceph-csi-rbd
+  version: 3.3.1
+  targetNamespace: ceph-csi-rbd
+  bootstrap: true
+  valuesContent: |-
+    csiConfig:
+    - clusterID: ceph
+      monitors:
+        - 192.168.122.11:6789
+        - 192.168.122.12:6789
+        - 192.168.122.13:6789
+    provisioner:
+      replicaCount: 1
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+    nodeplugin:
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists

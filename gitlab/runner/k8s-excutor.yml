@@ -1,0 +1,40 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gitlab-docker-runner
+  namespace: gitlab-runner
+spec:
+  repo: https://charts.gitlab.io
+  chart: gitlab-runner
+  version: 
+  targetNamespace: gitlab-runner
+  valuesContent: |
+    runnerRegistrationToken: ""
+    gitlabUrl: "https://gitlab.com/"
+    rbac:
+      create: true
+    runners:
+      name: "docker-runner"
+      config: |
+        [[runners]]
+        environment = [
+          "DOCKER_DRIVER=overlay2",
+          "DOCKER_TLS_CERTDIR=",
+          "DOCKER_HOST=tcp://docker:2375",
+          "DOCKER_BUILDKIT=1"
+        ]
+          [runners.kubernetes]
+            namespace = "gitlab-runner"
+            image = "docker.io/library/docker:stable-dind"
+            helper_image_flavor = "ubuntu"
+            privileged = true
+            [[runners.kubernetes.services]]
+              name = "docker.io/library/docker:stable-dind"
+              alias = "docker"
+            [[runners.kubernetes.volumes.empty_dir]]
+              name = "dind-storage"
+              mount_path = "/var/lib/docker"
+      tags: "docker"
+      runUntagged: false
+      

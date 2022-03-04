@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cattle-system
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rancher
+  namespace: cattle-system
+  annotations:
+    helm.cattle.io/chart-url: ""
+spec:
+  repo: https://releases.rancher.com/server-charts/stable
+  chart: rancher
+  valuesContent: |
+    hostname: rancher.example.com
+    replicas: 1

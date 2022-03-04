@@ -1,0 +1,11 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: mongo
+  annotations:
+    helm.cattle.io/chart-url: ""
+spec:
+  repo: https://charts.bitnami.com/bitnami
+  chart: mongodb
+  valuesContent: |
+    architecture: standalone

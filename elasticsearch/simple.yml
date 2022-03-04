@@ -1,0 +1,14 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: es
+  annotations:
+    helm.cattle.io/chart-url: ""
+spec:
+  repo: https://charts.bitnami.com/bitnami
+  chart: elasticsearch
+  valuesContent: |
+    master:
+      replicas: 3
+    data:
+      replicas: 1
